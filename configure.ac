@@ -1,0 +1,11 @@
+AC_INIT([cpktool], [0.8], [guan@pku.edu.cn])
+AC_PREREQ([2.59])
+AM_INIT_AUTOMAKE([1.10 no-define])
+AC_PROG_CC
+AC_PROG_INSTALL
+AM_PROG_CC_C_O
+
+LT_INIT
+
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
