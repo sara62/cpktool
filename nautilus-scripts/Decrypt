@@ -1,0 +1,27 @@
+#!/bin/bash
+# cpk encrypt a file or a folder to file.cpk or folder.tar.gz.cpk
+# 
+
+CPK=/usr/bin/cpk
+
+TITLE="CPK - Format Preserve Decrypt"
+
+if [ -z $NAUTILUS_SCRIPT_SELECTED_FILE_PATHS ]; then
+	zenity --error --title="$TITLE" --text="Error: no file selected!                  " --width=350
+	exit 1
+fi
+
+PASS=`zenity --entry --hide-text --text="Password:" --title="$TITLE"`
+if [ -z $PASS ]; then
+	zenity --error --text="Error: no password given"
+	exit 1
+fi
+
+for F in $NAUTILUS_SCRIPT_SELECTED_FILE_PATHS; do
+	cpk -format-preserve -decrypt -in "$F" -pass "$PASS"
+	if [ $? != 0 ]; then
+		zenity --error --text="Error: decrypt failed!"
+		exit 1
+	fi
+done
+

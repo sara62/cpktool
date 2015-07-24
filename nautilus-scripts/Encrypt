@@ -1,0 +1,38 @@
+#!/bin/bash
+
+CPK=/usr/bin/cpk
+
+TITLE="CPK Encrypt"
+
+if [ -z $NAUTILUS_SCRIPT_SELECTED_FILE_PATHS ]; then
+	zenity --error --text="Error: no file selected!"
+	exit 1
+fi
+
+RCPTS=`zenity --entry --title="CPK S3 Encrypt" --text="Enter recipient's identities (separate with ';')"`
+[ -z "$RCPTS" ] && exit 0
+
+LIST=`echo "$RCPTS" | tr ";" "\n"`
+for ID in $LIST; do
+	TO="${TO} -to $ID"
+done
+
+for F in $NAUTILUS_SCRIPT_SELECTED_FILE_PATHS; do
+
+	BASENAME=`basename $F`
+
+	#zenity --info --text="$F"
+	#zenity --info --text="$BASENAME"
+
+	# FIXME
+	TMPFILE="/home/guanzhi/.cpk/$BASENAME"
+
+	#zenity --info --text="$TMPFILE"
+
+	cp "$F" "$TMPFILE"
+
+	cpk -format-preserve -encrypt -in "$TMPFILE" $TO
+
+	rm "$TMPFILE"
+done
+

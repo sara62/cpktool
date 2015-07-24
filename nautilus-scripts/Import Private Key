@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# we need to check if cpk exit
+# we need to check is zenity exit
+
+
+title="CPK - Import Private Key"
+path=`zenity --file-selection --title "CPK - Import Private Key" --file-filter="*.pem *.PEM" --title="$title"`
+[ -z $path ] && exit 0
+
+file=`basename $path`
+id=${file%\.*}
+if [ -z $id ]; then
+	zenity --error --text="Error file name" --title="$title"
+	exit 0
+fi
+
+zenity --info --text="$id" --title="$title"
+
+#title="Import CPK Private Key"
+pass=`zenity --entry --hide-text --text="Input protection password" --title="$title" --width=350`
+[ -z "$pass" ] && exit 0
+
+
+
+cpk -set-identity $id
+if [ $? != 0 ]; then
+	zenity --error --text="Error"
+	exit 0
+fi
+
+cpk -import-sign-key    -in "$path" -pass "$pass"
+if [ $? != 0 ]; then
+	zenity --error --text="Error"
+	exit 0
+fi
+
+cpk -import-decrypt-key -in "$path" -pass "$pass"
+if [ $? != 0 ]; then
+	zenity --error --text="Error"
+fi
+

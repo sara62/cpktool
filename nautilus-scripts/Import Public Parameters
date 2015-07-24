@@ -1,0 +1,15 @@
+#!/bin/bash
+
+command -v zenity > /dev/null 2>&1 || echo "error: zenity not installed"; exit 1
+command -v cpk > /dev/null 2>&1 || { zenity --warning --text="CPK not installed!"; exit 1 }
+
+title="CPK - Import Public Parameters"
+path=`zenity --file-selection --file-filter="*.der *.DER" --title="$title"`
+[ -z $path ] && exit 0
+
+cpk -import-param -in "$path"
+if [ $? != 0 ]; then
+	zenity --error --text="Error"
+	exit 0
+fi
+zenity --info --text="Import CPK Public Parameters Success!     " --title="$title" --width=350
