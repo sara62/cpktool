@@ -1,0 +1,43 @@
+<html>
+<head>
+<title>CPK Authentication Demo</title>
+<script>
+	window.onload = function() {
+		var cpk = document.getElementById("plugin").cpk;
+		
+	}
+</script>
+</head>
+<body>
+	<h1>CPK Authentication Demo</h1>
+	<hr>
+
+	<embed name="plugin" type="application/x-cpk" id="plugin" width=0 height=0></embed>
+	<br>
+
+	<script>
+		var cpk = document.getElementById("plugin").cpk;
+		document.write("User's identity: ");
+		document.write(cpk.identity);
+		document.write("<br>");
+
+		document.write("Current UNIX Time: ");
+		var unixtime = (new Date).getTime().toString();
+		document.write(unixtime);
+		document.write("<br>");
+		
+		document.write("Sign UNIX Time with your key: ");
+		var signature = cpk.sign(unixtime);
+		document.write(signature);
+		document.write("<br>");
+
+		document.write("<h3>Authenticate</h3>");
+		var url = "http://162.105.30.87/cpk/verify.cgi?message=" + unixtime + "&signature=" + signature + "&signer=" + cpk.identity;
+		document.write("<a href=" + url + ">" + url + "</a>");
+	</script> 
+
+
+	
+</body>
+
+</html>

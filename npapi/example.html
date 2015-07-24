@@ -1,0 +1,45 @@
+<html>
+<head>
+<title>CPK Plugin Demo</title>
+<script>
+	window.onload = function() {
+		var cpk = document.getElementById("plugin").cpk;
+		
+	}
+</script>
+</head>
+<body>
+	<h1>CPK Cryptography Plugin</h1>
+	<hr>
+
+	<embed name="plugin" type="application/x-cpk" id="plugin"></embed>
+	<br>
+
+	<script>
+		var cpk = document.getElementById("plugin").cpk;
+		document.write("User's identity: ");
+		document.write(cpk.identity);
+		document.write("<br>");
+		
+		document.write("Sign message \"hello\" with your key: ");
+		var signature = cpk.sign("hello");
+		document.write(signature);
+		document.write("<br>");
+
+		document.write("Verify: ");
+		document.write(cpk.verify("hello", signature, cpk.identity));
+		document.write("<br>");
+
+		document.write("Encrypt message \"hello\" to \"alice@cpksecurity.com\": ");
+		var ciphertext = cpk.encrypt("hello", "alice@cpksecurity.com");
+		document.write(ciphertext);
+		document.write("<br>");
+		document.write("Decrypt result: ");
+		var plaintext = cpk.decrypt(ciphertext);
+		document.write(plaintext);
+		document.write("<br>");
+	</script> 
+
+
+</body>
+</html>

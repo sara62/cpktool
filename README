@@ -1,0 +1,34 @@
+# 
+# Build on Linux 
+# 
+# gcc -c *.c
+# gcc -shared -I../include/ main.o PluginObject.o CPKObject.o ../lib/libcpktool.a \
+#	../lib/libcpk.a ../lib/libcrypto.a -o libcpkplugin.so
+#
+# copy libcpkplugin.so to your browser default plugin path
+# in Ubuntu/Firefox the *.so NPAPI plugins are located at /usr/lib/mozilla/plugins/
+
+# Makefile for CPK NPAPI Plugin in Linux
+# guan@pku.edu.cn
+# 
+
+all: libcpkplugin.so
+
+libcpkplugin.so: main.o PluginObject.o CPKPlugin.o
+	gcc -shared -I../include/ main.o PluginObject.o CPKPlugin.o \
+		../lib/osx/libcpk.a -o ../lib/linux_x86/libcpkplugin.so
+
+main.o:
+	gcc -c main.c
+PluginObject.o
+	gcc -c PluginObject.c
+CPKPlugin.o
+	gcc -c CPKPlugin.c
+
+clean:
+	rm *.o
+	rm ../lib/linux_i386/libcpkplugin.so
+
+install:
+	cp ../lib/linux_i386/libcpkplugin.so /usr/share/mozilla/plugins/
+
